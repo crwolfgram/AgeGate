@@ -1,0 +1,179 @@
+Problem Statement:
+  We need a program that will check the user's birthday against the current day to decide if the user is over or under 21.  If the user is 21 or over, permit them access to the site.  If they are under 21, take them to a rejection screen. Display their age before redirection. Use select and option tags to get the user input.  The number of days should adapt to the month and whether or not it is a leap year.
+  
+  Nouns: user's birthday, current day, 21, access, rejection screen, select and option tag
+  
+  Verbs: check, against, decide, over, under, permit
+  
+Defining Diagram:
+Inputs:
+  inputYear
+  inputMonth
+  inputDate
+
+Processes:
+  fill select tag with years
+  fill select tag with months
+  fill select tag with days
+  get currentDate
+  get currentMonth
+  get currentYear
+  read inputYear
+  read inputMonth
+  read inputDate
+  display birthday
+  decide if user is over 21
+  redirect to welcome page
+  OR
+  redirect to rejection page
+
+Outputs:
+  birthday
+  welcome page
+  OR
+  rejection page
+  
+Psudocode:
+PopulateYear
+  initialize start to current year
+  initialize end to 1900
+  initialize options to null
+  
+  FOR (var i = start; i <= end; i++)
+    options += "<option>" + i + "</option>"
+  ENDFOR
+  inject options html into year select tag
+END
+
+PopulateMonth
+  initialize start to 1
+  initialize end to 12
+  initialize options to null
+  
+  FOR (var i = start; i <= end; i++)
+    options += "<option>" + i + "</option>"
+  ENDFOR
+  inject options html into month select tag
+END
+
+PopulateDay
+  initialize start to 1
+  initialize end to 31
+  initialize options to null
+  
+  FOR (var i = start; i <= end; i++)
+    options += "<option>" + i + "</option>"
+  ENDFOR
+  inject options html into day select tag
+END
+
+ChangeDays
+  initialize start to 1
+  create end
+  initialize month to displayed month
+  convert month to number
+  initialize year to displayed year
+  convert year to number
+  initialize options to null
+  
+  IF (month === 2)
+    IF ((year % 4 === 0 && (year % 100 != 0)) || (year % 400 === 0))
+      set end to 29
+    ELSE
+      set end to 28
+    ENDIF
+  ELSEIF (month === 4 || month === 6 || month === 9 || month === 11)
+    set end to 30
+  ELSE
+    set end to 31
+  ENDIF
+  
+  FOR (var day = start; day <= end; day++)
+    options += "<option>" + day + "</option>"
+  ENDFOR
+  inject options html into day select tag
+  
+END
+
+CheckBirthday (inputDate, inputYear, inputMonth)
+  initialize currentDate
+  initialize currentMonth
+  initialize currentYear
+  
+  IF (currentYear - inputYear > 21)
+    display "You entered: " + inputMonth  + "/" + inputDate + "/" + inputYear + ".<br> Welcome. <br> Please wait while you are redirected."
+    redirect to welcome.html after 5 seconds
+  ELSEIF (currentYear - inputYear === 21)
+    IF((currentMonth + 1) - inputMonth > 0)
+      display "You entered: " + inputMonth  + "/" + inputDate + "/" + inputYear + ".<br> Welcome. <br> Please wait while you are redirected."
+      redirect to welcome.html after 5 seconds
+    ELSEIF ((currentMonth + 1) - inputMonth === 0)
+      IF ((currentDate + 1) - inputDate > 0)
+        display "You entered: " + inputMonth  + "/" + inputDate + "/" + inputYear + ".<br> Welcome. <br> Please wait while you are redirected."
+        redirect to welcome.html after 5 seconds
+      ELSE
+        display "You entered: " + inputMonth  + "/" + inputDate + "/" + inputYear + ".<br> Access Denied. <br> Please wait while you are redirected."
+        redirect to access_denied.html after 5 seconds
+      ENDIF
+    ENDIF
+  ELSE
+    display "You entered: " + inputMonth  + "/" + inputDate + "/" + inputYear + ".<br> Access Denied. <br> Please wait while you are redirected."
+    redirect to access_denied.html after 5 seconds
+  ENDIF
+END
+
+MAIN
+  initialize inputDate
+  convert inputDate to number
+  initialize inputMonth
+  convert inputMonth to number
+  initialize inputYear
+  convert inputYear to number
+  
+  call CheckBirthday(inputDate, inputYear, inputMonth)
+END
+
+
+Checking the Solution Algorithm:
+
+VARIABLES: inputYear, inputMonth, inputDate
+
+TEST CASE 1: 
+
+  INPUT VALUES: 1994/9/30 (Check that days stop at thirty)
+
+  EXPECTED RESULT:You entered: 9/30/1994. Welcome. Please wait while you are redirected.
+
+  ACTUAL RESULT:You entered: 9/30/1994. Welcome. Please wait while you are redirected.
+
+TEST CASE 2:
+
+  INPUT VALUES: 1996/12/9 (Just turned 21)
+
+  EXPECTED RESULT: You entered: 12/9/1995. Welcome. Please wait while you are redirected.
+
+  ACTUAL RESULT: You entered: 12/9/1995. Welcome. Please wait while you are redirected.
+
+TEST CASE 3:
+
+  INPUT VALUES: 1996/12/10 (Turns 21 tomorrow)
+
+  EXPECTED RESULT: You entered: 12/10/1996. Access Denied. Please wait while you are redirected.
+
+  ACTUAL RESULT: You entered: 12/10/1996. Access Denied. Please wait while you are redirected.
+  
+TEST CASE 4:
+
+  INPUT VALUES: 2000/2/29 (leap year)
+  
+  EXPECTED RESULT: You entered: 2/29/2000. Access Denied. Please wait while you are redirected.
+
+  ACTUAL RESULT: You entered: 2/29/2000. Access Denied. Please wait while you are redirected.
+
+TEST CASE 5:
+
+INPUT VALUES: 1984/1/31 (Check that days stop at 31)
+
+EXPECTED RESULT: You entered: 1/31/1984. Welcome. Please wait while you are redirected.
+
+ACTUAL RESULT: You entered: 1/31/1984. Welcome. Please wait while you are redirected.
